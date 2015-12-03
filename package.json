@@ -1,6 +1,6 @@
 {
   "name": "meshblu-core-task-cache-token",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Meshblu Token Cacher",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
   "homepage": "https://github.com/octoblu/meshblu-core-task-cache-token#readme",
   "dependencies": {
     "coffee-script": "^1.10.0",
-    "meshblu-core-manager-token": "^1.1.2"
+    "meshblu-core-manager-token": "^2.0.0"
   },
   "devDependencies": {
     "chai": "^3.4.0",

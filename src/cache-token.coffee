@@ -3,19 +3,20 @@ TokenManager = require 'meshblu-core-manager-token'
 
 class CacheToken
   constructor: (options={}) ->
-    {@cache,@pepper} = options
-    @tokenManager = new TokenManager pepper: @pepper
+    {@cache,pepper,uuidAliasResolver} = options
+    @tokenManager = new TokenManager {pepper, uuidAliasResolver}
 
   do: (request, callback) =>
     {uuid,token} = request.metadata.auth
-    hashedToken = @tokenManager.hashToken uuid, token
-
-    @cache.set "#{uuid}:#{hashedToken}", '', (error) =>
+    @tokenManager.hashToken uuid, token, (error, hashedToken) =>
       return callback error if error?
-      callback null,
-        metadata:
-          responseId: request.metadata.responseId
-          code: 204
-          status: 'No Content'
+
+      @cache.set "#{uuid}:#{hashedToken}", '', (error) =>
+        return callback error if error?
+        callback null,
+          metadata:
+            responseId: request.metadata.responseId
+            code: 204
+            status: 'No Content'
 
 module.exports = CacheToken
