@@ -1,6 +1,6 @@
 {
   "name": "meshblu-core-task-cache-token",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Meshblu Token Cacher",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,7 @@
     "coffee-script": "^1.10.0",
     "fakeredis": "^0.3.4",
     "istanbul": "^0.4.0",
+    "meshblu-core-cache": "^1.5.0",
     "mocha": "^2.3.3",
     "mocha-istanbul": "^0.2.0",
     "sinon": "^1.17.2",

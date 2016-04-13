@@ -1,14 +1,16 @@
-CacheToken = require '../src/cache-token'
+Cache  = require 'meshblu-core-cache'
 crypto = require 'crypto'
 redis  = require 'fakeredis'
 uuid   = require 'uuid'
+CacheToken = require '../src/cache-token'
 
 describe 'CacheToken', ->
   beforeEach ->
     @redisKey = uuid.v1()
     @uuidAliasResolver = resolve: (uuid, callback) => callback null, uuid
+    cache = new Cache client: redis.createClient(@redisKey)
     @sut = new CacheToken
-      cache: redis.createClient(@redisKey)
+      cache: cache
       pepper: 'totally-a-secret'
       uuidAliasResolver: @uuidAliasResolver
     @cache = redis.createClient @redisKey
@@ -28,7 +30,15 @@ describe 'CacheToken', ->
       it 'should add a hashed token to the cache', (done) ->
         hashedTheseCurrentEventsAreShocking = 'PS0AFW2LxkywNTpxMDAZHAadnN1WEzPJepW7k8BYrRY='
         @cache.exists "electric-eels:#{hashedTheseCurrentEventsAreShocking}", (error, result) =>
+          return done error if error?
           expect(result).to.deep.equal 1
+          done()
+
+      it 'should expire the token in a day', (done) ->
+        hashedTheseCurrentEventsAreShocking = 'PS0AFW2LxkywNTpxMDAZHAadnN1WEzPJepW7k8BYrRY='
+        @cache.ttl "electric-eels:#{hashedTheseCurrentEventsAreShocking}", (error, ttl) =>
+          return done error if error?
+          expect(ttl).to.be.within 86300, 86500 # 24 hours +/- 100 seconds
           done()
 
       it 'should return a 204', ->

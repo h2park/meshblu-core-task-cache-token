@@ -23,7 +23,7 @@ class CacheToken
       return callback error if error?
       return @_doCallback request, 404, callback unless hashedToken?
 
-      @cache.set "#{uuid}:#{hashedToken}", '', (error) =>
+      @cache.setex "#{uuid}:#{hashedToken}", 86400, '', (error) =>
         return callback error if error?
         return @_doCallback request, 204, callback
 
