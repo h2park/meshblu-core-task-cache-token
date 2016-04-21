@@ -19,7 +19,7 @@ class CacheToken
     {uuid,token} = request.metadata.auth
     return @_doCallback request, 404, callback unless uuid? and token?
 
-    @tokenManager.hashToken uuid, token, (error, hashedToken) =>
+    @tokenManager.hashToken {uuid, token}, (error, hashedToken) =>
       return callback error if error?
       return @_doCallback request, 404, callback unless hashedToken?
 
